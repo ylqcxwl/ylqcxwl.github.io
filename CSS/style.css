@@ -1,0 +1,235 @@
+/* 全局样式重置 */
+* {
+    margin: 0;
+    /* 清除默认外边距 */
+    padding: 0;
+    /* 清除默认内边距 */
+    box-sizing: border-box;
+    /* 定义盒模型的计算方式 */
+}
+
+body {
+    background-image: url('5.jpg');
+    /* 替换为你自己的图片链接 */
+    background-size: cover;
+    /* 使背景图片覆盖整个页面 */
+    background-position: center;
+    /* 图片居中 */
+    background-repeat: no-repeat;
+    /* 防止背景图重复 */
+    height: 100vh;
+    /* 使body高度为视口高度 */
+    margin: 0;
+    /* 去掉默认的margin */
+}
+
+/* 左侧导航样式 */
+.left-nav {
+    width: 150px;
+    /* 左侧导航宽度 */
+    height: calc(100% - 10px);
+    /* 调整高度以保持与底部间距，减去顶部和底部间距 */
+    position: fixed;
+    /* 固定定位 */
+    top: 5px;
+    /* 距离顶部距离 */
+    left: 5px;
+    /* 距离左侧距离 */
+    bottom: 5px;
+    /* 距离底部底部距离 */
+    padding: 30px 15px;
+    /* 内边距 */
+    background: rgba(255, 255, 255, 0.5);
+    /* 背景颜色，设置为白色且半透明 */
+    backdrop-filter: blur(10px);
+    /* 背景模糊效果 */
+    border-radius: 10px;
+    /* 添加圆角 */
+}
+
+.left-nav:hover {
+    width: 150px;
+    /* 左侧导航宽度250px */
+    transition: width 0.5s;
+    /* 宽度变化时的过渡效果 */
+}
+
+/* 头像样式 */
+.user {
+    display: flex;
+    /* 使用Flexbox布局 */
+    flex-direction: column;
+    /* 让头像和昵称垂直排列 */
+    align-items: center;
+    /* 水平居中 */
+    width: 100%;
+    /* 容器宽度为100% */
+    height: 120px;
+    /* 左侧导航高度 */
+    border-radius: 8px;
+    /* 边角圆润 */
+}
+
+.user-img {
+    width: 80px;
+    /* 用户头像宽度设置为80px */
+    border-radius: 50%;
+    /* 设置为圆形头像 */
+    margin: 0;
+    /* 去掉额外的外边距 */
+}
+
+.user-name {
+    display: block;
+    /* 隐藏 */
+    font-weight: bold;
+    /* 字体加粗 */
+    color: #111313;
+    /* 字体颜色 */
+    margin: 10px 0 0 0;
+    /* 上边距20px，左右、下边距为0 */
+    padding: 0;
+    /* 内边距为0 */
+    text-align: center;
+    /* 文本居中 */
+    transition: display 0.3s;
+    /* 显示/隐藏过渡效果 */
+}
+
+/* 导航列表样式 */
+.nav-list {
+    display: flex;
+    /* 使用弹性盒布局 */
+    flex-direction: column;
+    /* 子元素排列方向为垂直 */
+    align-items: left;
+    /* 子元素垂直居中 */
+    justify-content: space-between;
+    /* 子元素水平居中 */
+    width: 100%;
+    /* 宽度 */
+    height: 50%;
+    /* 高度 */
+    list-style: none;
+    /* 去掉列表符号 */
+    margin-top: 30px;
+    /* 顶部外边距30px */
+    padding: 0;
+    /* 内边距为0 */
+}
+
+.nav-list li {
+    width: 100%;
+    /* 宽度 */
+    height: 50px;
+    /* 高度 */
+    display: flex;
+    /* 使用弹性盒布局 */
+    align-items: center;
+    /* 垂直居中 */
+    justify-content: left;
+    /* 水平居中 */
+    font-size: 16px;
+    /* 字体大小 */
+    color: #333;
+    /* 字体颜色 */
+    padding: 0px;
+    /* 内边距 */
+    border-radius: 10px;
+    /* 添加圆角 */
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    /* 增加变换和阴影的过渡效果 */
+}
+
+.nav-list li:hover {
+    cursor: pointer;
+    /* 鼠标悬停时鼠标样式 */
+    transform: scale(1.1);
+    /* 鼠标悬停时稍微放大 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    /* 添加阴影效果 */
+}
+
+.nav-list li.active {
+    cursor: default;
+    /* 禁用鼠标悬停样式 */
+    transform: scale(1.1);
+    /* 放大效果 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    /* 添加阴影效果 */
+}
+
+/* 高亮显示当前选中的导航项 */
+
+.left-nav li a {
+    display: flex;
+    /* 使用Flexbox布局 */
+    align-items: center;
+    /* 垂直居中 */
+    justify-content: left;
+    /* 水平居中 */
+    width: 100%;
+    /* 宽度 */
+    height: 100%;
+    /* 高度 */
+    padding: 0px 10px;
+    /* 内边距 */
+    position: relative;
+    /* 位置相对 */
+    white-space: nowrap;
+    /* 不换行 */
+    text-decoration: none;
+    /* 去掉下划线 */
+    color: #333;
+    /* 字体颜色 */
+    transition: color 0.3s;
+    /* 字体颜色变化时的过渡效果 */
+}
+
+.main-content {
+    width: calc(100% - 160px);
+    /* 宽度 */
+    height: calc(100% - 10px);
+    /* 高度 */
+    position: fixed;
+    /* 固定定位 */
+    background: rgba(250, 252, 251, 0.5);
+    /* 背景颜色，设置为白色且半透明 */
+    backdrop-filter: blur(5px);
+    /* 背景模糊效果 */
+    border-radius: 10px;
+    /* 添加圆角 */
+    top: 5px;
+    /* 距离顶部距离 */
+    left: 160px;
+    /* 距离左侧距离 */
+    right: 5px;
+    /* 距离右侧距离 */
+    bottom: 5px;
+    /* 距离底部距离 */
+    overflow: hidden;
+    /* 隐藏溢出 */
+    transition: left 0.5s;
+    /* 左侧距离变化时的过渡效果 */
+}
+
+.content {
+    display: none;
+    /* 默认隐藏所有内容 */
+}
+
+.active {
+    display: block;
+    /* 活动内容显示 */
+}
+
+section {
+    position: relative;
+    /* 相对定位 */
+    width: 100%;
+    /* 宽度 */
+    height: 100vh;
+    /* 高度 */
+    display: flex;
+    /* 使用Flexbox布局 */
+}
