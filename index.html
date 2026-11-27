@@ -1,296 +1,165 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
-    <meta charset="UTF-8"> <!-- 设置字符集为UTF-8 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 设置视口宽度为设备宽度，初始缩放比例为1.0 -->
-    <meta http-equiv="X-UA-Compatible" content="ie=edge"> <!-- 设置IE浏览器的渲染模式为最新模式 -->
-    <meta name="description" content="雨落倾城夏微凉"> <!-- 设置页面的描述 -->
-    <meta name="author" content="雨落倾城夏微凉"> <!-- 设置页面作者 -->
-    <meta name="keywords" content="雨落倾城夏微凉"> <!-- 设置页面的关键词 -->
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"> <!-- 设置网站图标 -->
-    <link rel="stylesheet" href="/css/style.css"> <!-- 引入CSS样式表 -->
-    <link rel="stylesheet" href="/css/iconfont/iconfont.css"> <!-- 引入CSS样式表 -->
-    <link rel="stylesheet" href="/css/animation.css"> <!-- 引入CSS动画样式表 -->
-    <title>雨落倾城夏微凉</title> <!-- 设置页面标题 -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="雨落倾城夏微凉的个人主页，收录资源、相册、应用与名片。">
+  <meta name="keywords" content="雨落倾城夏微凉,ylqcxwl,个人主页,资源,应用">
+  <meta name="author" content="雨落倾城夏微凉">
+  <meta name="theme-color" content="#f4f7f5">
+  <link rel="canonical" href="https://ylqcxwl.github.io/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="雨落倾城夏微凉 · 个人主页">
+  <meta property="og:description" content="资源、相册、应用与名片。">
+  <meta property="og:url" content="https://ylqcxwl.github.io/">
+  <meta property="og:image" content="https://ylqcxwl.github.io/bg.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="stylesheet" href="CSS/style.css">
+  <script src="JS/script.js" defer></script>
+  <title>雨落倾城夏微凉 · 个人主页</title>
 </head>
-
-<style>
-    /* 全局样式重置 */
-    * {
-        margin: 0; /* 清除默认外边距 */
-        padding: 0; /* 清除默认内边距 */
-        box-sizing: border-box; /* 定义盒模型的计算方式 */
-    }
-
-    body {
-        background-image: url('5.jpg'); /* 替换为你自己的图片链接 */
-        background-size: cover; /* 使背景图片覆盖整个页面 */
-        background-position: center; /* 图片居中 */
-        background-repeat: no-repeat; /* 防止背景图重复 */
-        height: 100vh; /* 使body高度为视口高度 */
-        margin: 0; /* 去掉默认的margin */
-    }
-
-    /* 左侧导航样式 */
-    .left-nav {
-        width: 150px; /* 左侧导航宽度 */
-        height: calc(100% - 10px); /* 调整高度以保持与底部间距，减去顶部和底部间距 */
-        position: fixed; /* 固定定位 */
-        top: 5px; /* 距离顶部距离 */
-        left: 5px; /* 距离左侧距离 */
-        bottom: 5px; /* 距离底部底部距离 */
-        padding: 30px 15px; /* 内边距 */
-        background: rgba(255, 255, 255, 0.5); /* 背景颜色，设置为白色且半透明 */
-        backdrop-filter: blur(10px); /* 背景模糊效果 */
-        border-radius: 10px 0 0 10px; /* 添加圆角 */
-    }
-
-    /* 用户信息样式 */
-    .user {
-        display: flex; /* 使用Flexbox布局 */
-        flex-direction: column; /* 让头像和昵称垂直排列 */
-        align-items: center; /* 水平居中 */
-        width: 100%; /* 容器宽度为100% */
-        height: 120px; /* 左侧导航高度 */
-        border-radius: 8px; /* 边角圆润 */
-    }
-
-    .user-img {
-        width: 80px; /* 用户头像宽度设置为80px */
-        border-radius: 50%; /* 设置为圆形头像 */
-        margin: 0; /* 去掉额外的外边距 */
-    }
-
-    .user-name {
-        display: block; /* 隐藏 */
-        font-weight: bold; /* 字体加粗 */
-        color: #111313; /* 字体颜色 */
-        margin: 10px 0 0 0; /* 上边距20px，左右、下边距为0 */
-        padding: 0; /* 内边距为0 */
-        text-align: center; /* 文本居中 */
-        transition: display 0.3s; /* 显示/隐藏过渡效果 */
-    }
-
-    /* 导航列表样式 */
-    .nav-list {
-        display: flex; /* 使用弹性盒布局 */
-        flex-direction: column; /* 子元素排列方向为垂直 */
-        align-items: left; /* 子元素垂直居中 */
-        justify-content: space-between; /* 子元素水平居中 */
-        width: 100%; /* 宽度 */
-        height: 50%; /* 高度 */
-        list-style: none; /* 去掉列表符号 */
-        margin-top: 30px; /* 顶部外边距30px */
-        padding: 0 ; /* 内边距为0 */
-    }
-
-    .nav-list li {
-        width: 100%; /* 宽度 */
-        height: 50px; /* 高度 */
-        display: flex; /* 使用弹性盒布局 */
-        align-items: center; /* 垂直居中 */
-        justify-content: center; /* 水平居中 */
-        font-size: 16px; /* 字体大小 */
-        color: #333; /* 字体颜色 */
-        padding: 0px; /* 内边距 */
-        border-radius: 10px; /* 添加圆角 */
-        transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* 增加变换和阴影的过渡效果 */
-    }
-
-    .nav-list li:hover {
-        cursor: pointer; /* 鼠标悬停时鼠标样式 */
-        transform: scale(1.1); /* 鼠标悬停时稍微放大 */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 添加阴影效果 */
-    }
-
-    .nav-list li.active {
-        cursor: default; /* 禁用鼠标悬停样式 */
-        transform: scale(1.1); /* 放大效果 */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 添加阴影效果 */
-    } /* 高亮显示当前选中的导航项 */
-
-    .left-nav li a {
-        display: flex; /* 使用Flexbox布局 */
-        align-items: center; /* 垂直居中 */
-        justify-content: center; /* 水平居中 */
-        width: 100%; /* 宽度 */
-        height: 100%; /* 高度 */
-        padding: 0px 10px; /* 内边距 */
-        position: relative; /* 位置相对 */
-        white-space: nowrap; /* 不换行 */
-        text-decoration: none; /* 去掉下划线 */
-        color: #333; /* 字体颜色 */
-        transition: color 0.3s; /* 字体颜色变化时的过渡效果 */
-    }
-
-    .code {
-        display: flex; /* 使用Flexbox布局 */
-        cursor: pointer; /* 鼠标悬停时鼠标样式 */
-        width: 100%; /* 宽度 */
-        height: 150px; /* 高度 */
-        margin: 30px 0px 0px 10px; /* 外边距30px */
-        border: 1px solid #85dde4; /* 边框 */
-        border-radius: 10px; /* 添加圆角 */
-    }
-
-    .code a {
-        display: flex; /* 使用Flexbox布局 */
-        align-items: center; /* 垂直居中 */
-        justify-content: center; /* 水平居中 */
-        align-items: center; /* 垂直居中 */
-        color: #98c937; /* 字体颜色 */
-        width: 100%; /* 宽度 */
-        height: 100%; /* 高度 */
-    }
-    .code .iconfont {
-        font-size: 80px; /* 增加图标大小 */
-        transition: color 0.3s; /* 字体颜色变化时的过渡效果 */
-    }
-    .code:hover .iconfont{
-        transform: scale(1.3); /* 放大效果 */
-        color: #333; /* 字体颜色 */
-        }
-
-    /* 主要部分内容样式 */
-    .main-content {
-        width: calc(100% - 160px); /* 宽度 */
-        height: calc(100% - 10px); /* 高度 */
-        position: fixed; /* 固定定位 */
-        background: rgba(250, 252, 251, 0.5); /* 背景颜色，设置为白色且半透明 */
-        backdrop-filter: blur(5px); /* 背景模糊效果 */
-        border-radius: 0 10px 0px 0 ; /* 添加圆角 */
-        top: 5px; /* 距离顶部距离 */
-        left: 160px; /* 距离左侧距离 */
-        right: 5px; /* 距离右侧距离 */
-        bottom: 5px; /* 距离底部距离 */
-        overflow: hidden; /* 隐藏溢出 */
-        transition: left 0.5s; /* 左侧距离变化时的过渡效果 */
-    }
-
-    .content {
-        display: none; /* 默认隐藏所有内容 */
-    }
-
-    .active {
-        display: block; /* 活动内容显示 */
-    }
-
-    section {
-        position: relative; /* 相对定位 */
-        width: 100%; /* 宽度 */
-        height: 100vh; /* 高度 */
-        display: flex; /* 使用Flexbox布局 */
-    }
-</style>
-
 <body>
-    <div class="container-nav">
-        <div class="left-nav">
-            <div class="user">
-                <img src="imgs/icon/favicon.ico" class="user-img">
-                <span class="user-name">
-                    <p>雨落倾城夏微凉</p>
-                    <p>zhuy</p>
-                </span>
-            </div>
-            <ul class="nav-list">
-                <li>
-                    <a href="#" onclick="showContent(1)"> <!-- 导航项 -->
-                        <div class="iconfont shouye">&#xe8b9;</div> <!-- 首页图标 -->
-                        <div> 首页 </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" onclick="showContent(2)"> <!-- 导航项 -->
-                        <div class="iconfont ziyuan">&#xe8a4;</div> <!-- 资源图标 -->
-                        <div> 资源 </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" onclick="showContent(3)"> <!-- 导航项 -->
-                        <div class="iconfont zhaoxiangji">&#xe663;</div> <!-- 相册图标 -->
-                        <div> 相册 </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" onclick="showContent(4)"> <!-- 导航项 -->
-                        <div class="iconfont yingyongzhongxin">&#xe623;</div> <!-- 应用中心图标 -->
-                        <div> 应用 </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" onclick="showContent(5)"> <!-- 导航项 -->
-                        <div class="iconfont mingpian">&#xe621;</div> <!-- 名片图标 -->
-                        <div> 名片 </div>
-                    </a>
-                </li>
-            </ul>
-            <div class="code">
-                <a>
-                    <div class="iconfont erweima">&#xe642;</div> <!-- code图标 -->
-                </a>
-            </div>
-    </div>
-    <main>
-        <div class="main-content">
-            <section class="content content1 active"> <!-- 初始显示主页的内容 -->
-                <h1>主页内容</h1> <!-- 页面标题 -->
-                <p>欢迎来到雨落倾城夏微凉！</p> <!-- 页面文本 -->
-            </section>
-            <section class="content content2"> <!-- 第二个内容区块 -->
-                <h2>资源内容</h2> <!-- 页面标题 -->
-                <p>资源内容</p> <!-- 页面文本 -->
-            </section>
-            <section class="content content3"> <!-- 第三个内容区块 -->
-                <p>相册内容</p> <!-- 页面文本 -->
-                <img src="imgs/icon/favicon.ico" alt="图片加载失败"> <!-- 图片 -->
-            </section>
-            <section class="content content4"> <!-- 第四个内容区块 -->
-                <p>应用内容</p> <!-- 页面文本 -->
-                <img src="imgs/icon/favicon.ico" alt="图片加载失败"> <!-- 图片 -->
-            </section>
-            <section class="content content5"> <!-- 第五个内容区块 -->
-                <p>名片内容</p> <!-- 页面文本 -->
-            </section>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <div class="app">
+    <aside class="sidebar">
+      <div class="profile">
+        <img class="avatar" src="avatar.webp" alt="雨落倾城夏微凉的头像" width="80" height="80">
+        <div class="profile-text">
+          <strong>雨落倾城夏微凉</strong>
+          <span>zhuy</span>
         </div>
+      </div>
+
+      <nav class="nav" aria-label="主导航">
+        <button class="nav-item is-active" type="button" data-view="home" aria-current="page">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
+          <span>首页</span>
+        </button>
+        <button class="nav-item" type="button" data-view="resources">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h7v6H4zM13 5h7v6h-7zM4 13h7v6H4zM13 13h7v6h-7z"/></svg>
+          <span>资源</span>
+        </button>
+        <button class="nav-item" type="button" data-view="gallery">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="m4 17 5-5 4 4 3-3 4 4"/></svg>
+          <span>相册</span>
+        </button>
+        <button class="nav-item" type="button" data-view="apps">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          <span>应用</span>
+        </button>
+        <button class="nav-item" type="button" data-view="contact">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="11" r="2"/><path d="M5 17c.8-1.8 2-2.7 3.5-2.7S11.2 15.2 12 17M14.5 10h4M14.5 13.5h4"/></svg>
+          <span>名片</span>
+        </button>
+      </nav>
+
+      <a class="qr-btn" href="#contact" aria-label="查看名片">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM19 19h2M14 21h2M21 14h-1"/></svg>
+      </a>
+    </aside>
+
+    <main class="panel" id="main">
+      <section class="view is-active" id="home" data-view="home" aria-labelledby="home-title">
+        <header class="hero">
+          <p class="eyebrow">个人主页 / Personal Homepage</p>
+          <h1 id="home-title">欢迎来到雨落倾城夏微凉。</h1>
+          <p class="lead">这里放着我的资源、相册、小工具和名片。慢慢看，随取随用。</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" type="button" data-go="resources">看看资源</button>
+            <button class="btn" type="button" data-go="apps">打开应用</button>
+          </div>
+        </header>
+
+        <form class="search" id="site-search" role="search">
+          <label class="sr-only" for="search-query">搜索内容</label>
+          <select id="search-engine" aria-label="搜索引擎">
+            <option value="site">本站搜索</option>
+            <option value="bing">Bing 搜索</option>
+            <option value="google">Google 搜索</option>
+          </select>
+          <input id="search-query" type="search" placeholder="输入搜索内容…" autocomplete="off">
+          <button type="submit">搜索</button>
+        </form>
+        <p class="search-status" id="search-status" role="status" aria-live="polite"></p>
+
+        <div class="tiles">
+          <a class="tile" href="#resources" data-keywords="资源 仓库 GitHub 项目">
+            <span class="tile-icon">R</span>
+            <strong>资源</strong>
+            <small>项目与常用链接</small>
+          </a>
+          <a class="tile" href="#gallery" data-keywords="相册 图片 照片">
+            <span class="tile-icon">P</span>
+            <strong>相册</strong>
+            <small>图片整理中</small>
+          </a>
+          <a class="tile" href="tools/蚊香螺旋生成器.html" data-keywords="应用 工具 蚊香螺旋生成器 小工具">
+            <span class="tile-icon">A</span>
+            <strong>应用</strong>
+            <small>蚊香螺旋生成器</small>
+          </a>
+          <a class="tile" href="#contact" data-keywords="名片 联系 GitHub 关于">
+            <span class="tile-icon">C</span>
+            <strong>名片</strong>
+            <small>找到我</small>
+          </a>
+        </div>
+      </section>
+
+      <section class="view" id="resources" data-view="resources" aria-labelledby="resources-title" hidden>
+        <header class="view-head">
+          <p class="eyebrow">Resources</p>
+          <h2 id="resources-title">资源</h2>
+          <p>常用项目与链接，来自我的 GitHub。</p>
+        </header>
+        <ul class="link-list">
+          <li><a href="https://github.com/ylqcxwl" target="_blank" rel="noopener noreferrer"><strong>GitHub 主页</strong><span>ylqcxwl</span></a></li>
+          <li><a href="https://github.com/ylqcxwl/box-label-printer" target="_blank" rel="noopener noreferrer"><strong>外箱标签打印程序</strong><span>PyQt5 + BarTender</span></a></li>
+          <li><a href="https://github.com/ylqcxwl/question-bank" target="_blank" rel="noopener noreferrer"><strong>题库</strong><span>五年级上册 · 4000 题</span></a></li>
+          <li><a href="https://github.com/ylqcxwl/youtube-notifier" target="_blank" rel="noopener noreferrer"><strong>YouTube 更新通知</strong><span>视频更新提醒</span></a></li>
+        </ul>
+      </section>
+
+      <section class="view" id="gallery" data-view="gallery" aria-labelledby="gallery-title" hidden>
+        <header class="view-head">
+          <p class="eyebrow">Gallery</p>
+          <h2 id="gallery-title">相册</h2>
+          <p>相册内容整理中，先放一张站点背景图。</p>
+        </header>
+        <figure class="photo">
+          <img src="bg.webp" alt="站点背景图" loading="lazy" decoding="async" width="1920" height="1200">
+          <figcaption>站点背景图 · 1920 × 1200</figcaption>
+        </figure>
+      </section>
+
+      <section class="view" id="apps" data-view="apps" aria-labelledby="apps-title" hidden>
+        <header class="view-head">
+          <p class="eyebrow">Apps</p>
+          <h2 id="apps-title">应用</h2>
+          <p>一些可以直接在浏览器里打开的小工具。</p>
+        </header>
+        <a class="app-card" href="tools/蚊香螺旋生成器.html">
+          <span class="app-icon">蚊</span>
+          <span><strong>蚊香螺旋生成器</strong><small>在线生成蚊香螺旋图案</small></span>
+          <span class="app-arrow" aria-hidden="true">→</span>
+        </a>
+      </section>
+
+      <section class="view" id="contact" data-view="contact" aria-labelledby="contact-title" hidden>
+        <header class="view-head">
+          <p class="eyebrow">Contact</p>
+          <h2 id="contact-title">名片</h2>
+          <p>名片内容。想看更多项目，去 GitHub 找我。</p>
+        </header>
+        <a class="app-card" href="https://github.com/ylqcxwl" target="_blank" rel="noopener noreferrer">
+          <span class="app-icon">GH</span>
+          <span><strong>GitHub · ylqcxwl</strong><small>github.com/ylqcxwl</small></span>
+          <span class="app-arrow" aria-hidden="true">↗</span>
+        </a>
+      </section>
     </main>
-    <script>
-        // 显示对应内容的函数
-        function showContent(option) {
-            // 隐藏所有内容
-            const contents = document.querySelectorAll('.content');
-            contents.forEach(content => {
-                content.classList.remove('active'); // 移除活动状态
-            });
-
-            // 根据选项显示相应内容
-            if (option === 1) {
-                document.querySelector('.content1').classList.add('active'); // 显示内容1
-            } else if (option === 2) {
-                document.querySelector('.content2').classList.add('active'); // 显示内容2
-            } else if (option === 3) {
-                document.querySelector('.content3').classList.add('active'); // 显示内容3
-            } else if (option === 4) {
-                document.querySelector('.content4').classList.add('active'); // 显示内容4
-            } else if (option === 5) {
-                document.querySelector('.content5').classList.add('active'); // 显示内容5
-            }
-
-            // 高亮显示被点击的导航项
-            const navItems = document.querySelectorAll('.nav-list li');
-            navItems.forEach(item => {
-                item.classList.remove('active'); // 移除所有导航项的活动状态
-            });
-            navItems[option - 1].classList.add('active'); // 仅将被点击的导航项设为活动
-        }
-
-        // 设置默认选中项
-        document.addEventListener('DOMContentLoaded', function() {
-            showContent(1); // 默认显示首页内容和设置导航为活动状态
-        });
-    </script>
+  </div>
 </body>
-
 </html>
-
