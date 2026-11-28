@@ -12,6 +12,12 @@ window.TOOLS_DATA = [
     "icon": ""
   },
   {
+    "name": "拷贝漫画",
+    "url": "https://www.2026copy.com/",
+    "desc": "拷贝漫画",
+    "icon": ""
+  },
+  {
     "name": "PNG转ICO在线转换器",
     "url": "https://webfem.com/tools/ico/",
     "desc": "免费制作 favicon.ico 图标",
