@@ -285,32 +285,6 @@ h2 {
   white-space: nowrap;
 }
 
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 26px;
-}
-
-.btn {
-  padding: 10px 18px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.75);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(24, 52, 42, 0.12);
-}
-
-.btn-primary {
-  border-color: var(--accent);
-  background: var(--accent);
-  color: #fff;
-}
-
 .search {
   display: flex;
   flex-wrap: wrap;
@@ -353,6 +327,10 @@ h2 {
   margin: 8px 2px 0;
   color: var(--muted);
   font-size: 14px;
+}
+
+.tiles[hidden] {
+  display: none;
 }
 
 .tiles {
@@ -607,6 +585,7 @@ h2 {
 
 /* 搜索栏：胶囊输入框 + 引擎快捷栏 */
 .search {
+  position: relative;
   display: block;
   margin-top: 36px;
   padding: 0;
@@ -617,6 +596,8 @@ h2 {
 .search-bar {
   display: flex;
   align-items: center;
+  width: 66.666%;
+  margin-inline: auto;
   padding: 6px 6px 6px 10px;
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -700,32 +681,33 @@ h2 {
   stroke-linecap: round;
 }
 
-.engine-shortcuts {
-  display: flex;
+.engine-menu {
+  position: absolute;
+  top: calc(100% - 2px);
+  left: 10px;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: repeat(3, 72px);
   gap: 6px;
-  margin-top: 10px;
   padding: 10px;
   border: 1px solid var(--line);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.6);
-  overflow-x: auto;
-  scrollbar-width: none;
+  border-radius: 14px;
+  background: var(--panel-solid);
+  box-shadow: var(--shadow);
 }
 
-.engine-shortcuts::-webkit-scrollbar {
+.engine-menu[hidden] {
   display: none;
 }
 
 .search .engine-chip {
   display: flex;
-  flex: 0 0 auto;
   flex-direction: column;
   align-items: center;
   gap: 5px;
-  min-width: 58px;
-  padding: 7px 8px;
+  padding: 7px 6px;
   border: 0;
-  border-radius: 12px;
+  border-radius: 10px;
   background: transparent;
   color: var(--muted);
   font-size: 11px;
@@ -889,6 +871,10 @@ h2 {
 
   .lead {
     white-space: normal;
+  }
+
+  .search-bar {
+    width: 100%;
   }
 
   .tiles,

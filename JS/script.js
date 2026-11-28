@@ -15,6 +15,8 @@
       results.textContent = "";
       results.hidden = true;
     }
+    const tiles = document.querySelector(".tiles");
+    if (tiles) tiles.hidden = false;
   }
 
   function showView(name, updateHash = false) {
@@ -78,8 +80,10 @@
   const engine = document.getElementById("search-engine");
   const status = document.getElementById("search-status");
   const results = document.getElementById("search-results");
-  const shortcuts = document.getElementById("engine-shortcuts");
+  const menu = document.getElementById("engine-menu");
+  const engineToggle = document.getElementById("engine-toggle");
   const badge = document.getElementById("search-engine-badge");
+  const tiles = document.querySelector(".tiles");
   const engines = {
     baidu: "https://www.baidu.com/s?wd=%s",
     bing: "https://www.bing.com/search?q=%s",
@@ -88,85 +92,48 @@
     bilibili: "https://search.bilibili.com/all?keyword=%s",
   };
 
+  function closeMenu() {
+    menu.hidden = true;
+    engineToggle.setAttribute("aria-expanded", "false");
+  }
+
   function syncEngineUI() {
-    const chip = shortcuts.querySelector(`.engine-chip[data-engine="${engine.value}"]`);
+    const chip = menu.querySelector(`.engine-chip[data-engine="${engine.value}"]`);
     const icon = chip?.querySelector(".engine-ico");
     badge.textContent = icon?.textContent || "站";
     badge.style.background = icon ? getComputedStyle(icon).color : "var(--accent)";
-    shortcuts.querySelectorAll(".engine-chip").forEach((item) => {
+    menu.querySelectorAll(".engine-chip").forEach((item) => {
       item.classList.toggle("is-active", item.dataset.engine === engine.value);
     });
   }
 
-  function addEngineChip(key, name) {
-    const option = document.createElement("option");
-    option.value = key;
-    option.textContent = name;
-    engine.appendChild(option);
+  engineToggle.addEventListener("click", () => {
+    const open = menu.hidden;
+    menu.hidden = !open;
+    engineToggle.setAttribute("aria-expanded", String(open));
+  });
 
-    const chip = document.createElement("button");
-    chip.type = "button";
-    chip.className = "engine-chip";
-    chip.dataset.engine = key;
-    const icon = document.createElement("span");
-    icon.className = "engine-ico";
-    icon.style.setProperty("--chip", "#256b57");
-    icon.textContent = name.charAt(0).toUpperCase();
-    const label = document.createElement("span");
-    label.textContent = name;
-    chip.append(icon, label);
-    shortcuts.insertBefore(chip, shortcuts.querySelector('[data-engine="add"]'));
-  }
-
-  function addEngine() {
-    const name = prompt("搜索引擎名称：");
-    if (!name) return;
-    const url = prompt("搜索地址，用 %s 代表关键词，例如 https://example.com/search?q=%s：");
-    if (!url || !url.includes("%s")) {
-      alert("搜索地址需要包含 %s");
-      return;
+  engineToggle.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      engineToggle.click();
     }
-    const key = `custom_${Date.now()}`;
-    engines[key] = url;
-    addEngineChip(key, name.trim());
-    try {
-      const saved = JSON.parse(localStorage.getItem("customSearchEngines") || "[]");
-      saved.push({ key, name: name.trim(), url });
-      localStorage.setItem("customSearchEngines", JSON.stringify(saved));
-    } catch (_) {
-      // 本地存储不可用时仅本次会话有效
-    }
-    engine.value = key;
-    syncEngineUI();
-    query.focus();
-  }
+  });
 
-  function loadCustomEngines() {
-    try {
-      const saved = JSON.parse(localStorage.getItem("customSearchEngines") || "[]");
-      saved.forEach(({ key, name, url }) => {
-        if (!key || !name || !url) return;
-        engines[key] = url;
-        addEngineChip(key, name);
-      });
-    } catch (_) {
-      // 忽略损坏的本地存储
-    }
-  }
-
-  engine.addEventListener("change", syncEngineUI);
-  shortcuts.addEventListener("click", (event) => {
+  menu.addEventListener("click", (event) => {
     const chip = event.target.closest(".engine-chip");
     if (!chip) return;
-    if (chip.dataset.engine === "add") {
-      addEngine();
-      return;
-    }
     engine.value = chip.dataset.engine;
     syncEngineUI();
+    closeMenu();
     query.focus();
   });
-  loadCustomEngines();
+
+  document.addEventListener("click", (event) => {
+    if (!engineToggle.contains(event.target) && !menu.contains(event.target)) closeMenu();
+  });
+
+  engine.addEventListener("change", syncEngineUI);
   syncEngineUI();
 
   form.addEventListener("submit", (event) => {
@@ -201,6 +168,7 @@
 
     status.textContent = `找到 ${hits.length} 个结果，显示在下方。`;
     results.hidden = false;
+    tiles.hidden = true;
 
     hits.forEach((card) => {
       const view = card.closest(".view");

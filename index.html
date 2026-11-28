@@ -66,19 +66,15 @@
           <p class="eyebrow">个人主页 / Personal Homepage</p>
           <h1 id="home-title">欢迎来到雨落倾城夏微凉。</h1>
           <p class="lead">这里放着我的资源、相册、小工具和名片。慢慢看，随取随用。</p>
-          <div class="hero-actions">
-            <button class="btn btn-primary" type="button" data-go="resources">看看资源</button>
-            <button class="btn" type="button" data-go="tools">打开工具</button>
-          </div>
         </header>
 
         <form class="search" id="site-search" role="search">
           <label class="sr-only" for="search-query">搜索内容</label>
           <div class="search-bar">
-            <span class="search-engine-wrap">
+            <span class="search-engine-wrap" id="engine-toggle" role="button" tabindex="0" aria-haspopup="listbox" aria-expanded="false" aria-label="选择搜索引擎">
               <span class="search-engine-badge" id="search-engine-badge" aria-hidden="true">站</span>
               <span class="search-caret" aria-hidden="true">▾</span>
-              <select id="search-engine" aria-label="搜索引擎">
+              <select id="search-engine" aria-label="搜索引擎" hidden>
                 <option value="site">本站搜索</option>
                 <option value="baidu">百度搜索</option>
                 <option value="bing">必应搜索</option>
@@ -92,14 +88,13 @@
               <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
             </button>
           </div>
-          <div class="engine-shortcuts" id="engine-shortcuts" role="group" aria-label="选择搜索引擎">
+          <div class="engine-menu" id="engine-menu" role="listbox" aria-label="选择搜索引擎" hidden>
             <button type="button" class="engine-chip is-active" data-engine="site"><span class="engine-ico" style="--chip:#256b57">站</span><span>本站</span></button>
             <button type="button" class="engine-chip" data-engine="baidu"><span class="engine-ico" style="--chip:#2b6ef2">百</span><span>百度</span></button>
             <button type="button" class="engine-chip" data-engine="bing"><span class="engine-ico" style="--chip:#0aa2c0">b</span><span>必应</span></button>
             <button type="button" class="engine-chip" data-engine="google"><span class="engine-ico" style="--chip:#ea4335">G</span><span>Google</span></button>
             <button type="button" class="engine-chip" data-engine="github"><span class="engine-ico" style="--chip:#24292f">GH</span><span>GitHub</span></button>
             <button type="button" class="engine-chip" data-engine="bilibili"><span class="engine-ico" style="--chip:#fb7299">b</span><span>哔哩哔哩</span></button>
-            <button type="button" class="engine-chip" data-engine="add"><span class="engine-ico" style="--chip:#5d6863">+</span><span>添加</span></button>
           </div>
         </form>
         <p class="search-status" id="search-status" role="status" aria-live="polite"></p>
@@ -116,7 +111,7 @@
             <strong>相册</strong>
             <small>图片整理中</small>
           </a>
-          <a class="tile" href="tools/螺旋文字.html" target="_blank" rel="noopener noreferrer" data-keywords="工具 螺旋文字生成 小工具">
+          <a class="tile" href="#tools" data-keywords="工具 螺旋文字生成 小工具">
             <span class="tile-icon">A</span>
             <strong>工具</strong>
             <small>螺旋文字生成</small>
