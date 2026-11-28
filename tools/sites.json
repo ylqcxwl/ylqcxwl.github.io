@@ -1,0 +1,10 @@
+{
+  "_说明": "在这里添加外部网站：name 是显示名称，url 是完整地址，desc 可选。保存后 GitHub Actions 会自动更新工具页，图标自动从站点 favicon.ico 获取。",
+  "sites": [
+    {
+      "name": "GitHub",
+      "url": "https://github.com/ylqcxwl",
+      "desc": "我的代码仓库"
+    }
+  ]
+}

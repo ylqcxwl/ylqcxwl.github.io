@@ -16,6 +16,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="stylesheet" href="CSS/style.css">
+  <script src="JS/tools-data.js" defer></script>
   <script src="JS/script.js" defer></script>
   <title>雨落倾城夏微凉 · 个人主页</title>
 </head>
@@ -140,11 +141,9 @@
           <h2 id="tools-title">工具</h2>
           <p>一些可以直接在浏览器里打开的小工具。</p>
         </header>
-        <a class="app-card" href="tools/螺旋文字生成器.html" target="_blank" rel="noopener noreferrer">
-          <span class="app-icon">螺</span>
-          <span><strong>螺旋文字生成器</strong><small>在线生成螺旋文字图案</small></span>
-          <span class="app-arrow" aria-hidden="true">↗</span>
-        </a>
+        <div class="tools-grid" id="tools-grid"></div>
+        <p class="tools-empty" id="tools-empty" hidden>工具清单为空。把 HTML 放进 tools/ 文件夹，或在 tools/sites.json 里添加网址。</p>
+        <noscript><p class="tools-empty">请启用 JavaScript 查看工具清单。</p></noscript>
       </section>
 
       <section class="view" id="contact" data-view="contact" aria-labelledby="contact-title" hidden>

@@ -98,5 +98,71 @@
       : "本页没有匹配内容，可以试试 Bing 或 Google。";
   });
 
+  function faviconFor(url) {
+    try {
+      const parsed = new URL(url, location.href);
+      if (parsed.host === location.host) return "";
+      return `${parsed.origin}/favicon.ico`;
+    } catch (_) {
+      return "";
+    }
+  }
+
+  function renderTools() {
+    const grid = document.getElementById("tools-grid");
+    const empty = document.getElementById("tools-empty");
+    if (!grid) return;
+
+    const data = Array.isArray(window.TOOLS_DATA) ? window.TOOLS_DATA : [];
+    grid.textContent = "";
+    empty.hidden = data.length > 0;
+
+    data.forEach((item) => {
+      if (!item || !item.name || !item.url) return;
+      const external = /^https?:\/\//i.test(item.url);
+      const card = document.createElement("a");
+      card.className = "tool-card";
+      card.href = item.url;
+      card.target = "_blank";
+      card.rel = "noopener noreferrer";
+
+      const wrap = document.createElement("span");
+      wrap.className = "tool-icon-wrap";
+
+      const fallback = document.createElement("span");
+      fallback.className = "tool-fallback";
+      fallback.textContent = item.name.trim().charAt(0) || "工";
+      wrap.appendChild(fallback);
+
+      const iconUrl = item.icon || faviconFor(item.url);
+      if (iconUrl) {
+        const img = document.createElement("img");
+        img.className = "tool-icon";
+        img.src = iconUrl;
+        img.alt = "";
+        img.loading = "lazy";
+        img.decoding = "async";
+        img.addEventListener("error", () => img.remove());
+        wrap.appendChild(img);
+      }
+
+      const text = document.createElement("span");
+      const title = document.createElement("strong");
+      title.textContent = item.name;
+      const desc = document.createElement("small");
+      desc.textContent = item.desc || (external ? new URL(item.url).hostname : "本地工具");
+      text.append(title, desc);
+
+      const arrow = document.createElement("span");
+      arrow.className = "tool-arrow";
+      arrow.setAttribute("aria-hidden", "true");
+      arrow.textContent = external ? "↗" : "→";
+
+      card.append(wrap, text, arrow);
+      grid.appendChild(card);
+    });
+  }
+
+  renderTools();
   showView(location.hash.slice(1) || activeView);
 })();
