@@ -10,5 +10,11 @@ window.TOOLS_DATA = [
     "url": "https://github.com/ylqcxwl",
     "desc": "我的代码仓库",
     "icon": ""
+  },
+  {
+    "name": "PNG转ICO在线转换器",
+    "url": "https://webfem.com/tools/ico/",
+    "desc": "免费制作 favicon.ico 图标",
+    "icon": ""
   }
 ];
