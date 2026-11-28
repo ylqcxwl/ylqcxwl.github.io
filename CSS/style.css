@@ -814,7 +814,8 @@ h2 {
 .tile,
 .link-list a,
 .app-card,
-.tool-card {
+.tool-card,
+.result-card {
   position: relative;
 }
 
@@ -838,20 +839,22 @@ h2 {
 .tile small,
 .link-list span,
 .app-card small,
-.tool-card small {
+.tool-card small,
+.search-results .result-card small {
   position: absolute;
   left: 50%;
   top: calc(100% + 8px);
-  z-index: 5;
+  z-index: 20;
   width: max-content;
-  max-width: min(240px, 80vw);
+  max-width: 100%;
+  overflow-wrap: anywhere;
   padding: 6px 10px;
   border-radius: 8px;
   background: rgba(29, 36, 33, 0.92);
   color: #fff;
   font-size: 12px;
   line-height: 1.5;
-  text-align: center;
+  text-align: left;
   white-space: normal;
   opacity: 0;
   visibility: hidden;
@@ -868,7 +871,9 @@ h2 {
 .app-card:hover small,
 .app-card:focus-visible small,
 .tool-card:hover small,
-.tool-card:focus-visible small {
+.tool-card:focus-visible small,
+.search-results .result-card:hover small,
+.search-results .result-card:focus-visible small {
   opacity: 1;
   visibility: visible;
   transform: translate(-50%, 0);
