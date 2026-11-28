@@ -93,7 +93,8 @@
       '<a class="btn ghost" href="' + esc(backLink) + '">返回选择页</a>';
     card.innerHTML = html;
     if (!noauto) {
-      setTimeout(function () { window.location.href = target; }, 500);
+      // 立即跳转，不做中间停留。replace 避免留下可回退的中间页。
+      try { window.location.replace(target); } catch (e) { window.location.href = target; }
     }
   } else {
     var html2 = '<div class="logo">一码通 · 收款码合并</div><h1>' + esc(name) + '</h1>' +
