@@ -278,6 +278,13 @@ h2 {
   font-size: clamp(24px, 3vw, 34px);
 }
 
+.lead {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 17px;
+  white-space: nowrap;
+}
+
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
@@ -603,6 +610,10 @@ h2 {
   .app {
     display: block;
     padding: 10px;
+  }
+
+  .lead {
+    white-space: normal;
   }
 
   .sidebar {
