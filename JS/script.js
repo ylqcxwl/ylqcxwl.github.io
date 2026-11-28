@@ -76,9 +76,14 @@
     }
 
     if (engine.value !== "site") {
-      const base = engine.value === "bing"
-        ? "https://www.bing.com/search?q="
-        : "https://www.google.com/search?q=";
+      const engines = {
+        baidu: "https://www.baidu.com/s?wd=",
+        bilibili: "https://search.bilibili.com/all?keyword=",
+        github: "https://github.com/search?q=",
+        bing: "https://www.bing.com/search?q=",
+        google: "https://www.google.com/search?q=",
+      };
+      const base = engines[engine.value] || engines.bing;
       window.open(base + encodeURIComponent(term), "_blank", "noopener");
       return;
     }
