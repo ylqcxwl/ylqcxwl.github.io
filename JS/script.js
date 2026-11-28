@@ -208,7 +208,30 @@
 
       const icon = document.createElement("span");
       icon.className = "result-icon";
-      icon.textContent = title.charAt(0) || "结";
+      const initial = title.charAt(0) || "结";
+      const sourceIcon = card.querySelector(".tool-icon") || card.querySelector(".engine-ico-img");
+      let iconSrc = "";
+      if (href && /github\.com/i.test(href)) {
+        iconSrc = "imgs/engines/github.png";
+      } else {
+        iconSrc = sourceIcon?.getAttribute("src") || "";
+      }
+      if (!iconSrc && href && /^https?:\/\//i.test(href)) {
+        iconSrc = faviconFor(href);
+      }
+      if (!iconSrc) iconSrc = "favicon.ico";
+      if (iconSrc) {
+        const img = document.createElement("img");
+        img.className = "result-icon-img";
+        img.src = iconSrc;
+        img.alt = "";
+        img.addEventListener("error", () => {
+          icon.textContent = initial;
+        });
+        icon.appendChild(img);
+      } else {
+        icon.textContent = initial;
+      }
 
       const text = document.createElement("span");
       text.className = "result-text";
