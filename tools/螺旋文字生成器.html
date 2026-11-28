@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>螺旋文字生成器</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:#f5f5f3;color:#2c2c2a;font-size:13px}
+.app{display:grid;grid-template-columns:410px 1fr;min-height:100vh}
+.panel{background:#fff;border-right:1px solid #e6e5e0;padding:18px 18px 40px;overflow-y:auto;max-height:100vh}
+h1{font-size:16px;font-weight:500;margin:0 0 4px}
+.sub{font-size:12px;color:#888780;margin:0 0 18px}
+.group{border-top:1px solid #eeeae2;padding:14px 0 4px}
+.group:first-of-type{border-top:none}
+.gtitle{font-size:12px;font-weight:500;color:#5f5e5a;margin-bottom:10px;letter-spacing:.5px}
+label{display:block;margin-bottom:9px}
+.lab{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;font-size:12px;color:#444441}
+.val{color:#185fa5;font-variant-numeric:tabular-nums}
+textarea,select,input[type=text],input[type=number]{width:100%;border:1px solid #dcdbd5;border-radius:6px;padding:8px;font-size:13px;font-family:inherit;background:#fff;color:#2c2c2a;outline:none}
+textarea:focus,select:focus,input:focus{border-color:#85b7eb}
+textarea{resize:vertical;min-height:86px;line-height:1.6}
+input[type=range]{width:100%;accent-color:#378add;margin:0}
+input[type=color]{width:100%;height:30px;border:1px solid #dcdbd5;border-radius:6px;padding:2px;background:#fff;cursor:pointer}
+.row{display:flex;gap:10px}
+.row>*{flex:1;min-width:0}
+.check{display:flex;align-items:center;gap:7px;font-size:12px;color:#444441;cursor:pointer;margin-bottom:8px}
+.check input{accent-color:#378add}
+.btns{display:flex;gap:8px;margin-top:14px}
+button{flex:1;padding:9px;border:1px solid #dcdbd5;border-radius:6px;background:#fff;color:#2c2c2a;font-size:12px;cursor:pointer;font-family:inherit}
+button:hover{border-color:#85b7eb;background:#f7fbff}
+button.primary{background:#185fa5;color:#fff;border-color:#185fa5}
+button.primary:hover{background:#0c447c}
+.stage{position:relative;padding:24px;display:flex;align-items:center;justify-content:center;overflow:auto;min-height:100vh}
+.canvas-wrap{background:#eceae4;border:1px solid #e6e5e0;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.04);padding:6px;line-height:0;margin:auto;max-width:100%}
+#preview{display:block;width:auto;height:auto;max-width:min(680px,100%);max-height:calc(100vh - 180px)}
+.info{position:absolute;bottom:48px;left:24px;right:24px;font-size:12px;color:#888780;display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.tip{position:absolute;bottom:10px;left:24px;right:24px;margin:auto;font-size:11px;color:#a09e96;text-align:center;max-width:600px;line-height:1.6}
+@media(max-width:820px){.app{grid-template-columns:1fr}.panel{max-height:none;border-right:none;border-bottom:1px solid #e6e5e0}.stage{padding:14px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="panel">
+    <h1>螺旋文字生成器</h1>
+    <p class="sub">竖排文字中线盘绕 · 实时预览</p>
+
+    <div class="group">
+      <div class="gtitle">文字内容</div>
+      <label><textarea id="text" spellcheck="false">人之初，性本善。性相近，习相远。
+苟不教，性乃迁。教之道，贵以专。
+昔孟母，择邻处。子不学，断机杼。
+窦燕山，有义方。教五子，名俱扬。
+养不教，父之过。教不严，师之惰。
+子不学，非所宜。幼不学，老何为。
+玉不琢，不成器。人不学，不知义。</textarea></label>
+      <label class="check" style="margin-top:10px"><input type="checkbox" id="keepPunct" checked> 保留标点符号</label>
+      <div class="tip">换行会被忽略；关闭标点后只保留文字</div>
+    </div>
+
+    <div class="group">
+      <div class="gtitle">画布尺寸</div>
+      <div class="row">
+        <label><div class="lab"><span>宽（px）</span></div><input type="number" id="cw" min="200" max="2000" step="50" value="700"></label>
+        <label><div class="lab"><span>高（px）</span></div><input type="number" id="ch" min="200" max="2000" step="50" value="700"></label>
+      </div>
+      <label style="margin-top:10px"><div class="lab"><span>画布形状</span></div>
+        <select id="shape">
+          <option value="rect">方形（直角矩形）</option>
+          <option value="round">圆角矩形</option>
+          <option value="circle">圆形</option>
+          <option value="ellipse">椭圆</option>
+        </select>
+      </label>
+      <div class="tip" style="text-align:left;margin-top:8px">尺寸改变后重新适配螺旋，导出图片按此尺寸生成</div>
+    </div>
+
+    <div class="group">
+      <div class="gtitle">螺旋结构</div>
+      <label><div class="lab"><span>文字方向</span></div>
+        <select id="direction">
+          <option value="out">由内往外（中心起笔）</option>
+          <option value="in">由外往内（外圈起笔）</option>
+        </select>
+      </label>
+      <label><div class="lab"><span>螺旋方向</span></div>
+        <select id="spin">
+          <option value="cw">顺时针</option>
+          <option value="ccw">逆时针</option>
+        </select>
+      </label>
+      <label><div class="lab"><span>中心留白</span><span class="val" id="vInner">60 px</span></div>
+        <input type="range" id="inner" min="0" max="180" value="60"></label>
+      <label><div class="lab"><span>圈间距</span><span class="val" id="vRing">46 px</span></div>
+        <input type="range" id="ring" min="24" max="120" value="46"></label>
+      <label><div class="lab"><span>字间距</span><span class="val" id="vGap">10 px</span></div>
+        <input type="range" id="gap" min="0" max="60" value="10"></label>
+      <label><div class="lab"><span>起始角度</span><span class="val" id="vStart">0°</span></div>
+        <input type="range" id="start" min="-180" max="180" value="0"></label>
+    </div>
+
+    <div class="group">
+      <div class="gtitle">文字排布</div>
+      <label><div class="lab"><span>排布方式</span></div>
+        <select id="mode">
+          <option value="in">竖排 · 字顶朝内（盘香）</option>
+          <option value="out">竖排 · 字顶朝外</option>
+          <option value="tan">横排 · 沿切线（左到右）</option>
+          <option value="tanrev">横排 · 沿切线（右到左）</option>
+          <option value="none">全部正立 · 不旋转</option>
+        </select>
+      </label>
+      <label><div class="lab"><span>旋转微调</span><span class="val" id="vRot">0°</span></div>
+        <input type="range" id="rot" min="-180" max="180" value="0"></label>
+    </div>
+
+    <div class="group">
+      <div class="gtitle">字体与颜色</div>
+      <label><div class="lab"><span>字体</span></div>
+        <select id="font">
+          <option value="SimSun, '宋体', serif">宋体</option>
+          <option value="KaiTi, '楷体', serif">楷体</option>
+          <option value="FangSong, '仿宋', serif">仿宋</option>
+          <option value="'Microsoft YaHei', '微软雅黑', sans-serif">微软雅黑</option>
+          <option value="'PingFang SC', sans-serif">苹方</option>
+          <option value="serif">衬线体</option>
+          <option value="sans-serif">无衬线体</option>
+        </select>
+      </label>
+      <label><div class="lab"><span>字体大小</span><span class="val" id="vSize">22 px</span></div>
+        <input type="range" id="size" min="10" max="60" value="22"></label>
+      <div class="row">
+        <label><div class="lab"><span>文字颜色</span></div><input type="color" id="color" value="#2c2c2a"></label>
+        <label><div class="lab"><span>背景颜色</span></div><input type="color" id="bg" value="#ffffff"></label>
+      </div>
+      <label class="check"><input type="checkbox" id="halo" checked> 字加白描边（压住螺旋线）</label>
+    </div>
+
+    <div class="group">
+      <div class="gtitle">辅助线</div>
+      <label class="check"><input type="checkbox" id="showline" checked> 显示螺旋线</label>
+      <div class="row">
+        <label><div class="lab"><span>线色</span></div><input type="color" id="linecolor" value="#d3d1c7"></label>
+        <label><div class="lab"><span>线宽</span></div><input type="range" id="linew" min="0" max="4" step="0.5" value="1"></label>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="gtitle">导出</div>
+      <div class="btns">
+        <button id="svgBtn" class="primary">下载 SVG</button>
+        <button id="pngBtn">下载 PNG</button>
+        <button id="pdfBtn">下载 PDF</button>
+      </div>
+      <div class="tip" style="text-align:left;margin-top:8px">PDF 为 A4 高清位图版；需要矢量请用 SVG</div>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="canvas-wrap"><svg id="preview" viewBox="0 0 700 700" width="700" height="700" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <div class="info"><span id="infoChars">字数 0</span><span id="infoTurns">圈数 0</span><span id="infoScale">缩放 100%</span><span id="infoSize">画布 700×700</span></div>
+    <div class="tip">字顶朝内 = 竖排文字从上往下读时，字头指向螺旋中心；字间距决定整条螺旋的长度，字数越多圈数越多。</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var svg=$('preview'), NS='http://www.w3.org/2000/svg';
+  var W=700, H=700, CX=350, CY=350, MAXR=328;
+
+  function el(name,attrs){var e=document.createElementNS(NS,name);for(var k in attrs)e.setAttribute(k,attrs[k]);return e}
+  function paper(shape,fill){
+    if(shape==='circle')return el('circle',{cx:CX,cy:CY,r:Math.min(W,H)/2,fill:fill});
+    if(shape==='ellipse')return el('ellipse',{cx:CX,cy:CY,rx:W/2,ry:H/2,fill:fill});
+    if(shape==='round')return el('rect',{x:0,y:0,width:W,height:H,rx:Math.min(W,H)*0.06,fill:fill});
+    return el('rect',{x:0,y:0,width:W,height:H,fill:fill});
+  }
+
+  function build(){
+    var raw=$('text').value.replace(/[\r\n]/g,'');
+    if(!$('keepPunct').checked) raw=raw.replace(/[，。！？；：、,.!?;:'"“”‘’（）()《》〈〉【】\[\]『』「」…—\-]/g,'');
+    var chars=Array.from(raw);
+    var n=chars.length;
+    var fontSize=+$('size').value, gap=+$('gap').value, ring=+$('ring').value;
+    var inner=+$('inner').value, start=(+$('start').value)*Math.PI/180;
+    var reverse=$('direction').value==='in', mode=$('mode').value, 微调=(+$('rot').value)*Math.PI/180;
+    var sgn=$('spin').value==='ccw'?-1:1;
+    var font=$('font').value, color=$('color').value, bg=$('bg').value;
+    var halo=$('halo').checked, showline=$('showline').checked;
+    var linecolor=$('linecolor').value, linew=+$('linew').value;
+
+    W=Math.max(200,Math.min(2000,Math.round(+$('cw').value||700)));
+    H=Math.max(200,Math.min(2000,Math.round(+$('ch').value||700)));
+    CX=W/2; CY=H/2; MAXR=Math.min(W,H)/2-12;
+    svg.setAttribute('viewBox','0 0 '+W+' '+H);
+    svg.setAttribute('width',W); svg.setAttribute('height',H);
+    svg.textContent='';
+    svg.appendChild(paper($('shape').value,bg));
+
+    if(!n){$('infoChars').textContent='字数 0';$('infoSize').textContent='画布 '+W+'×'+H;return}
+
+    var step=fontSize+gap;
+    var L=n*step;
+    var b=ring/(2*Math.PI);
+    var tmax=(-inner+Math.sqrt(inner*inner+2*b*L))/b;
+    if(inner===0) tmax=Math.sqrt(2*L/b);
+    var rout=inner+b*tmax;
+    var scale=Math.min(1,(MAXR)/(rout||1));
+    var rin=inner*scale, bs=b*scale, fs=fontSize*scale;
+
+    var startR=reverse?rout*scale:rin;
+    var dr=reverse?-bs:bs;
+    var steps=Math.max(4000,Math.ceil(tmax*140));
+    var xs=[],ys=[],al=[0],ts=[];
+    for(var i=0;i<=steps;i++){
+      var t=tmax*i/steps, r=startR+dr*t;
+      var a=sgn*t+start;
+      var x=CX+r*Math.cos(a), y=CY+r*Math.sin(a);
+      xs.push(x);ys.push(y);ts.push(t);
+      if(i>0)al.push(al[i-1]+Math.hypot(x-xs[i-1],y-ys[i-1]));
+    }
+    var total=al[steps];
+
+    var used=xs.map(function(x,i){return [x,ys[i],ts[i]]}).filter(function(p){return p[2]<=tmax+0.001});
+    var minx=Infinity,maxx=-Infinity,miny=Infinity,maxy=-Infinity;
+    used.forEach(function(p){minx=Math.min(minx,p[0]);maxx=Math.max(maxx,p[0]);miny=Math.min(miny,p[1]);maxy=Math.max(maxy,p[1])});
+    var ox=CX-(minx+maxx)/2, oy=CY-(miny+maxy)/2;
+    var maxR=0;
+    used.forEach(function(p){maxR=Math.max(maxR,Math.hypot(p[0]-CX,p[1]-CY))});
+    var allow=Math.max(0,MAXR-maxR), off=Math.hypot(ox,oy);
+    if(off>allow&&off>0){ox*=allow/off;oy*=allow/off}
+
+    var g=el('g',{transform:'translate('+ox.toFixed(1)+' '+oy.toFixed(1)+')'});
+    if(showline){
+      var segs=[];
+      for(var i=0;i<=steps;i+=18)segs.push((i?'L':'M')+xs[i].toFixed(1)+' '+ys[i].toFixed(1));
+      g.appendChild(el('path',{d:segs.join(' '),fill:'none',stroke:linecolor,'stroke-width':linew}));
+    }
+
+    var base;
+    if(mode==='in')base=-Math.PI/2;
+    else if(mode==='out')base=Math.PI/2;
+    else if(mode==='tan')base=0;
+    else if(mode==='tanrev')base=Math.PI;
+    else base=null;
+
+    chars.forEach(function(ch,k){
+      var s=(k+0.5)*total/n;
+      var j=1;while(j<steps&&al[j]<s)j++;
+      var f=(s-al[j-1])/((al[j]-al[j-1])||1);
+      var x=xs[j-1]+f*(xs[j]-xs[j-1]), y=ys[j-1]+f*(ys[j]-ys[j-1]);
+      var t=ts[j-1]+f*(ts[j]-ts[j-1]);
+      var r=startR+dr*t, a=sgn*t+start;
+      var dx=dr*Math.cos(a)-r*sgn*Math.sin(a);
+      var dy=dr*Math.sin(a)+r*sgn*Math.cos(a);
+      var ang=base===null?0:Math.atan2(dy,dx)+base+微调;
+      var txt=el('text',{
+        transform:'translate('+x.toFixed(1)+' '+y.toFixed(1)+') rotate('+(ang*180/Math.PI).toFixed(1)+')',
+        'text-anchor':'middle','dominant-baseline':'central',
+        'font-size':fs.toFixed(1),'font-family':font,fill:color
+      });
+      if(halo){txt.setAttribute('paint-order','stroke');txt.setAttribute('stroke',bg);txt.setAttribute('stroke-width',(3.2).toFixed(1));txt.setAttribute('stroke-linejoin','round')}
+      txt.textContent=ch;g.appendChild(txt);
+    });
+    svg.appendChild(g);
+
+    $('infoChars').textContent='字数 '+n;
+    $('infoTurns').textContent='圈数 '+(tmax/(2*Math.PI)).toFixed(1);
+    $('infoScale').textContent='缩放 '+Math.round(scale*100)+'%';
+    $('infoSize').textContent='画布 '+W+'×'+H;
+  }
+
+  function bind(id,vid,fmt){
+    var e=$(id);
+    e.addEventListener('input',function(){if(vid)$(vid).textContent=fmt?fmt(e.value):e.value;build()});
+  }
+  ['text','font','color','bg','halo','mode','direction','spin','keepPunct','showline','linecolor','cw','ch','shape'].forEach(function(id){$(id).addEventListener('input',build)});
+  ['cw','ch'].forEach(function(id){$(id).addEventListener('change',function(){this.value=(id==='cw'?W:H);build()})});
+  bind('size','vSize',function(v){return v+' px'});
+  bind('gap','vGap',function(v){return v+' px'});
+  bind('ring','vRing',function(v){return v+' px'});
+  bind('inner','vInner',function(v){return v+' px'});
+  bind('start','vStart',function(v){return v+'°'});
+  bind('rot','vRot',function(v){return v+'°'});
+  bind('linew',null);
+
+  function serialize(){
+    var c=svg.cloneNode(true);
+    c.setAttribute('xmlns',NS);
+    return '<?xml version="1.0" encoding="UTF-8"?>\n'+new XMLSerializer().serializeToString(c);
+  }
+  function download(url,name){var a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a)}
+  $('svgBtn').addEventListener('click',function(){
+    var blob=new Blob([serialize()],{type:'image/svg+xml;charset=utf-8'});
+    var url=URL.createObjectURL(blob);download(url,'螺旋文字.svg');setTimeout(function(){URL.revokeObjectURL(url)},1000);
+  });
+  function svgToCanvas(scale,cb,err){
+    var img=new Image();
+    img.onload=function(){
+      var cv=document.createElement('canvas');cv.width=W*scale;cv.height=H*scale;
+      var ctx=cv.getContext('2d');ctx.scale(scale,scale);ctx.drawImage(img,0,0,W,H);
+      cb(cv);
+    };
+    img.onerror=err||function(){alert('图片渲染失败，请改用 SVG 导出')};
+    img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(serialize());
+  }
+  $('pngBtn').addEventListener('click',function(){svgToCanvas(2,function(cv){download(cv.toDataURL('image/png'),'螺旋文字.png')})});
+
+  function loadScript(src,cb,err){
+    var s=document.createElement('script');s.src=src;s.onload=cb;s.onerror=err;document.head.appendChild(s);
+  }
+  function makePDF(){
+    svgToCanvas(3,function(cv){
+      var land=W>=H;
+      var pdf=new window.jspdf.jsPDF({orientation:land?'landscape':'portrait',unit:'mm',format:'a4'});
+      var pw=land?297:210, ph=land?210:297;
+      var k=Math.min((pw-20)/W,(ph-20)/H), dw=W*k, dh=H*k;
+      pdf.addImage(cv.toDataURL('image/png'),'PNG',(pw-dw)/2,(ph-dh)/2,dw,dh);
+      pdf.save('螺旋文字.pdf');
+    });
+  }
+  $('pdfBtn').addEventListener('click',function(){
+    if(window.jspdf&&window.jspdf.jsPDF){makePDF();return}
+    var btn=this,txt=btn.textContent;btn.textContent='加载中…';
+    loadScript('https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js',function(){
+      btn.textContent=txt;makePDF();
+    },function(){
+      btn.textContent=txt;
+      alert('无法联网加载 PDF 组件，已切换到浏览器打印：请在打印窗口选择「另存为 PDF」。');
+      var w=window.open('','_blank');
+      if(w){w.document.write('<!DOCTYPE html><meta charset="utf-8"><title>螺旋文字.pdf</title><body style="margin:0">'+serialize()+'</body>');w.document.close();setTimeout(function(){w.focus();w.print()},300)}
+      else window.print();
+    });
+  });
+
+  build();
+})();
+</script>
+</body>
+</html>
