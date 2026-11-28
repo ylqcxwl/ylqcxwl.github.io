@@ -254,6 +254,14 @@ a {
   }
 }
 
+.hero {
+  text-align: center;
+}
+
+.hero .lead {
+  margin-inline: auto;
+}
+
 .eyebrow {
   margin: 0 0 8px;
   color: var(--accent);
