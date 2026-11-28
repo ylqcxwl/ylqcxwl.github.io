@@ -154,7 +154,7 @@
     const needle = term.toLocaleLowerCase("zh-CN");
     clearHits();
     const cards = Array.from(
-      document.querySelectorAll(".tile, .link-list a, .tool-card, .app-card")
+      document.querySelectorAll(".link-list a, .tool-card, .app-card")
     );
     const hits = cards.filter((card) => {
       const text = `${card.textContent} ${card.dataset.keywords || ""}`;
