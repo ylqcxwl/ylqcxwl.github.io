@@ -600,7 +600,7 @@ h2 {
   margin-inline: auto;
   padding: 6px 6px 6px 10px;
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: 14px;
   background: rgba(255, 255, 255, 0.78);
   box-shadow: 0 2px 10px rgba(24, 52, 42, 0.06);
 }

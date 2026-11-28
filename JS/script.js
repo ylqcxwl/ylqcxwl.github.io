@@ -144,26 +144,22 @@
     if (!engineToggle.contains(event.target) && !menu.contains(event.target)) closeMenu();
   });
 
-  engine.addEventListener("change", syncEngineUI);
+  engine.addEventListener("change", () => {
+    syncEngineUI();
+    if (engine.value === "site") runSiteSearch();
+    else clearHits();
+  });
   syncEngineUI();
 
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
+  function runSiteSearch() {
     const term = query.value.trim();
-
+    clearHits();
     if (!term) {
-      query.focus();
-      return;
-    }
-
-    if (engine.value !== "site") {
-      const base = engines[engine.value] || engines.bing;
-      window.open(base.replace("%s", encodeURIComponent(term)), "_blank", "noopener");
+      status.textContent = "";
       return;
     }
 
     const needle = term.toLocaleLowerCase("zh-CN");
-    clearHits();
     const cards = Array.from(
       document.querySelectorAll(".link-list a, .tool-card, .app-card")
     );
@@ -225,6 +221,29 @@
       item.append(icon, text);
       results.appendChild(item);
     });
+  }
+
+  query.addEventListener("input", () => {
+    if (engine.value === "site") runSiteSearch();
+    else clearHits();
+  });
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const term = query.value.trim();
+
+    if (!term) {
+      query.focus();
+      return;
+    }
+
+    if (engine.value !== "site") {
+      const base = engines[engine.value] || engines.bing;
+      window.open(base.replace("%s", encodeURIComponent(term)), "_blank", "noopener");
+      return;
+    }
+
+    runSiteSearch();
   });
 
   function faviconFor(url) {
