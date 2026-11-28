@@ -10,6 +10,11 @@
     document.querySelectorAll(".search-hit").forEach((el) => {
       el.classList.remove("search-hit");
     });
+    const results = document.getElementById("search-results");
+    if (results) {
+      results.textContent = "";
+      results.hidden = true;
+    }
   }
 
   function showView(name, updateHash = false) {
@@ -72,6 +77,97 @@
   const query = document.getElementById("search-query");
   const engine = document.getElementById("search-engine");
   const status = document.getElementById("search-status");
+  const results = document.getElementById("search-results");
+  const shortcuts = document.getElementById("engine-shortcuts");
+  const badge = document.getElementById("search-engine-badge");
+  const engines = {
+    baidu: "https://www.baidu.com/s?wd=%s",
+    bing: "https://www.bing.com/search?q=%s",
+    google: "https://www.google.com/search?q=%s",
+    github: "https://github.com/search?q=%s",
+    bilibili: "https://search.bilibili.com/all?keyword=%s",
+  };
+
+  function syncEngineUI() {
+    const chip = shortcuts.querySelector(`.engine-chip[data-engine="${engine.value}"]`);
+    const icon = chip?.querySelector(".engine-ico");
+    badge.textContent = icon?.textContent || "站";
+    badge.style.background = icon ? getComputedStyle(icon).color : "var(--accent)";
+    shortcuts.querySelectorAll(".engine-chip").forEach((item) => {
+      item.classList.toggle("is-active", item.dataset.engine === engine.value);
+    });
+  }
+
+  function addEngineChip(key, name) {
+    const option = document.createElement("option");
+    option.value = key;
+    option.textContent = name;
+    engine.appendChild(option);
+
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "engine-chip";
+    chip.dataset.engine = key;
+    const icon = document.createElement("span");
+    icon.className = "engine-ico";
+    icon.style.setProperty("--chip", "#256b57");
+    icon.textContent = name.charAt(0).toUpperCase();
+    const label = document.createElement("span");
+    label.textContent = name;
+    chip.append(icon, label);
+    shortcuts.insertBefore(chip, shortcuts.querySelector('[data-engine="add"]'));
+  }
+
+  function addEngine() {
+    const name = prompt("搜索引擎名称：");
+    if (!name) return;
+    const url = prompt("搜索地址，用 %s 代表关键词，例如 https://example.com/search?q=%s：");
+    if (!url || !url.includes("%s")) {
+      alert("搜索地址需要包含 %s");
+      return;
+    }
+    const key = `custom_${Date.now()}`;
+    engines[key] = url;
+    addEngineChip(key, name.trim());
+    try {
+      const saved = JSON.parse(localStorage.getItem("customSearchEngines") || "[]");
+      saved.push({ key, name: name.trim(), url });
+      localStorage.setItem("customSearchEngines", JSON.stringify(saved));
+    } catch (_) {
+      // 本地存储不可用时仅本次会话有效
+    }
+    engine.value = key;
+    syncEngineUI();
+    query.focus();
+  }
+
+  function loadCustomEngines() {
+    try {
+      const saved = JSON.parse(localStorage.getItem("customSearchEngines") || "[]");
+      saved.forEach(({ key, name, url }) => {
+        if (!key || !name || !url) return;
+        engines[key] = url;
+        addEngineChip(key, name);
+      });
+    } catch (_) {
+      // 忽略损坏的本地存储
+    }
+  }
+
+  engine.addEventListener("change", syncEngineUI);
+  shortcuts.addEventListener("click", (event) => {
+    const chip = event.target.closest(".engine-chip");
+    if (!chip) return;
+    if (chip.dataset.engine === "add") {
+      addEngine();
+      return;
+    }
+    engine.value = chip.dataset.engine;
+    syncEngineUI();
+    query.focus();
+  });
+  loadCustomEngines();
+  syncEngineUI();
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -83,15 +179,8 @@
     }
 
     if (engine.value !== "site") {
-      const engines = {
-        baidu: "https://www.baidu.com/s?wd=",
-        bilibili: "https://search.bilibili.com/all?keyword=",
-        github: "https://github.com/search?q=",
-        bing: "https://www.bing.com/search?q=",
-        google: "https://www.google.com/search?q=",
-      };
       const base = engines[engine.value] || engines.bing;
-      window.open(base + encodeURIComponent(term), "_blank", "noopener");
+      window.open(base.replace("%s", encodeURIComponent(term)), "_blank", "noopener");
       return;
     }
 
@@ -110,16 +199,53 @@
       return;
     }
 
-    hits.forEach((card) => card.classList.add("search-hit"));
-    const preferred = hits.find((card) => {
+    status.textContent = `找到 ${hits.length} 个结果，显示在下方。`;
+    results.hidden = false;
+
+    hits.forEach((card) => {
       const view = card.closest(".view");
-      return view && view.dataset.view !== "home";
-    }) || hits[0];
-    const firstView = preferred.closest(".view");
-    const target = firstView ? firstView.dataset.view : "home";
-    goTo(target, true);
-    const label = navItems.find((item) => item.dataset.view === target)?.textContent.trim() || target;
-    status.textContent = `找到 ${hits.length} 个结果，已跳转到「${label}」并高亮。`;
+      const viewName = view ? view.dataset.view : "home";
+      const label = navItems.find((item) => item.dataset.view === viewName)?.textContent.trim() || "首页";
+      const title = card.querySelector("strong")?.textContent.trim() || card.textContent.trim().slice(0, 24);
+      const descEl = card.querySelector("small") || (card.matches(".link-list a") ? card.querySelector("span") : null);
+      const desc = descEl?.textContent.trim() || "";
+      const href = card.getAttribute("href");
+
+      const item = document.createElement("a");
+      item.className = "result-card";
+      if (href && href.startsWith("#")) {
+        item.href = href;
+        item.addEventListener("click", (event) => {
+          event.preventDefault();
+          goTo(href.slice(1));
+        });
+      } else if (href) {
+        item.href = href;
+        if (card.target) item.target = card.target;
+        if (card.rel) item.rel = card.rel;
+      } else {
+        item.href = `#${viewName}`;
+        item.addEventListener("click", (event) => {
+          event.preventDefault();
+          goTo(viewName);
+        });
+      }
+
+      const icon = document.createElement("span");
+      icon.className = "result-icon";
+      icon.textContent = title.charAt(0) || "结";
+
+      const text = document.createElement("span");
+      text.className = "result-text";
+      const strong = document.createElement("strong");
+      strong.textContent = title;
+      const small = document.createElement("small");
+      small.textContent = [label, desc].filter(Boolean).join(" · ");
+      text.append(strong, small);
+
+      item.append(icon, text);
+      results.appendChild(item);
+    });
   });
 
   function faviconFor(url) {
