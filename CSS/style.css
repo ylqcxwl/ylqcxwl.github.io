@@ -262,6 +262,11 @@ a {
   margin-inline: auto;
 }
 
+.hero .eyebrow {
+  text-align: center;
+  text-indent: 0.07em;
+}
+
 .eyebrow {
   margin: 0 0 8px;
   color: var(--accent);
