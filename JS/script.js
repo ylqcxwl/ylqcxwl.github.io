@@ -142,6 +142,7 @@
         img.alt = "";
         img.loading = "lazy";
         img.decoding = "async";
+        img.addEventListener("load", () => img.classList.add("is-loaded"));
         img.addEventListener("error", () => img.remove());
         wrap.appendChild(img);
       }

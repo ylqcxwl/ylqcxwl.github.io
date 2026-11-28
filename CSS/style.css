@@ -592,8 +592,13 @@ h2 {
   height: 100%;
   padding: 5px;
   border-radius: 11px;
-  background: #fff;
   object-fit: contain;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.tool-icon.is-loaded {
+  opacity: 1;
 }
 
 .tool-arrow {
