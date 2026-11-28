@@ -6,6 +6,12 @@
   const validViews = views.map((view) => view.dataset.view);
   let activeView = "home";
 
+  function clearHits() {
+    document.querySelectorAll(".search-hit").forEach((el) => {
+      el.classList.remove("search-hit");
+    });
+  }
+
   function showView(name, updateHash = false) {
     if (!validViews.includes(name)) {
       name = "home";
@@ -33,7 +39,8 @@
     }
   }
 
-  function goTo(name) {
+  function goTo(name, keepHits = false) {
+    if (!keepHits) clearHits();
     if (validViews.includes(name)) {
       showView(name, true);
     }
@@ -57,6 +64,7 @@
   });
 
   window.addEventListener("hashchange", () => {
+    clearHits();
     showView(location.hash.slice(1));
   });
 
@@ -64,7 +72,6 @@
   const query = document.getElementById("search-query");
   const engine = document.getElementById("search-engine");
   const status = document.getElementById("search-status");
-  const tiles = Array.from(document.querySelectorAll(".tile"));
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -89,18 +96,30 @@
     }
 
     const needle = term.toLocaleLowerCase("zh-CN");
-    let found = 0;
-    tiles.forEach((tile) => {
-      const text = `${tile.textContent} ${tile.dataset.keywords || ""}`;
-      const matched = text.toLocaleLowerCase("zh-CN").includes(needle);
-      tile.hidden = !matched;
-      if (matched) found += 1;
+    clearHits();
+    const cards = Array.from(
+      document.querySelectorAll(".tile, .link-list a, .tool-card, .app-card")
+    );
+    const hits = cards.filter((card) => {
+      const text = `${card.textContent} ${card.dataset.keywords || ""}`;
+      return text.toLocaleLowerCase("zh-CN").includes(needle);
     });
 
-    goTo("home");
-    status.textContent = found
-      ? `找到 ${found} 个与本页相关的内容。`
-      : "本页没有匹配内容，可以试试 Bing 或 Google。";
+    if (!hits.length) {
+      status.textContent = "本站没有匹配内容，可以试试百度、B站、GitHub 等搜索引擎。";
+      return;
+    }
+
+    hits.forEach((card) => card.classList.add("search-hit"));
+    const preferred = hits.find((card) => {
+      const view = card.closest(".view");
+      return view && view.dataset.view !== "home";
+    }) || hits[0];
+    const firstView = preferred.closest(".view");
+    const target = firstView ? firstView.dataset.view : "home";
+    goTo(target, true);
+    const label = navItems.find((item) => item.dataset.view === target)?.textContent.trim() || target;
+    status.textContent = `找到 ${hits.length} 个结果，已跳转到「${label}」并高亮。`;
   });
 
   function faviconFor(url) {
