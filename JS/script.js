@@ -46,8 +46,16 @@
     }
   }
 
+  function clearSearch() {
+    const query = document.getElementById("search-query");
+    const status = document.getElementById("search-status");
+    if (query) query.value = "";
+    if (status) status.textContent = "";
+    clearHits();
+  }
+
   function goTo(name, keepHits = false) {
-    if (!keepHits) clearHits();
+    if (!keepHits) clearSearch();
     if (validViews.includes(name)) {
       showView(name, true);
     }
@@ -71,7 +79,7 @@
   });
 
   window.addEventListener("hashchange", () => {
-    clearHits();
+    clearSearch();
     showView(location.hash.slice(1));
   });
 
