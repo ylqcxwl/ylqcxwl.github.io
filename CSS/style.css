@@ -684,10 +684,11 @@ h2 {
 .engine-menu {
   position: absolute;
   top: calc(100% - 2px);
-  left: 10px;
+  left: 16.667%;
   z-index: 20;
-  display: grid;
-  grid-template-columns: repeat(3, 72px);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   gap: 6px;
   padding: 10px;
   border: 1px solid var(--line);
@@ -875,6 +876,10 @@ h2 {
 
   .search-bar {
     width: 100%;
+  }
+
+  .engine-menu {
+    left: 0;
   }
 
   .tiles,
