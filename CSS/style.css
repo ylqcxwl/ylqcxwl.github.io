@@ -601,12 +601,6 @@ h2 {
   opacity: 1;
 }
 
-.tool-arrow {
-  margin-left: auto;
-  color: var(--accent);
-  font-size: 18px;
-}
-
 .tools-empty {
   color: var(--muted);
 }

@@ -157,12 +157,7 @@
       desc.textContent = item.desc || (external ? new URL(item.url).hostname : "本地工具");
       text.append(title, desc);
 
-      const arrow = document.createElement("span");
-      arrow.className = "tool-arrow";
-      arrow.setAttribute("aria-hidden", "true");
-      arrow.textContent = external ? "↗" : "→";
-
-      card.append(wrap, text, arrow);
+      card.append(wrap, text);
       grid.appendChild(card);
     });
   }
