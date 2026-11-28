@@ -99,9 +99,20 @@
 
   function syncEngineUI() {
     const chip = menu.querySelector(`.engine-chip[data-engine="${engine.value}"]`);
-    const icon = chip?.querySelector(".engine-ico");
-    badge.textContent = icon?.textContent || "站";
-    badge.style.background = icon ? getComputedStyle(icon).color : "var(--accent)";
+    const img = chip?.querySelector(".engine-ico-img");
+    badge.textContent = "";
+    if (img) {
+      const badgeImg = document.createElement("img");
+      badgeImg.className = "engine-badge-img";
+      badgeImg.src = img.getAttribute("src");
+      badgeImg.alt = "";
+      badge.appendChild(badgeImg);
+      badge.style.background = "#fff";
+    } else {
+      const icon = chip?.querySelector(".engine-ico");
+      badge.textContent = icon?.textContent || "站";
+      badge.style.background = icon ? getComputedStyle(icon).color : "var(--accent)";
+    }
     menu.querySelectorAll(".engine-chip").forEach((item) => {
       item.classList.toggle("is-active", item.dataset.engine === engine.value);
     });
