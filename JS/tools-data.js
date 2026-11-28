@@ -18,7 +18,7 @@ window.TOOLS_DATA = [
     "icon": ""
   },
   {
-    "name": "PNG转ICO在线转换器",
+    "name": "图片转ICO",
     "url": "https://webfem.com/tools/ico/",
     "desc": "免费制作 favicon.ico 图标",
     "icon": "tools/icons/webfem.png"
