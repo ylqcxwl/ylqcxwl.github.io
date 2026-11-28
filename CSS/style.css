@@ -655,32 +655,6 @@ h2 {
   outline: none;
 }
 
-.search .search-submit {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  flex: none;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: var(--accent);
-  color: #fff;
-}
-
-.search .search-submit:hover {
-  background: #1d5848;
-}
-
-.search .search-submit svg {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-}
-
 .engine-menu {
   position: absolute;
   top: calc(100% - 2px);

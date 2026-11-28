@@ -228,6 +228,13 @@
     else clearHits();
   });
 
+  query.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      form.requestSubmit();
+    }
+  });
+
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     const term = query.value.trim();
